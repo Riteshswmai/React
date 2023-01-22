@@ -25,13 +25,13 @@ const PokemonType = PropTypes.shape({
 
 })
 
-const PokemonRow = ({ pokemon }) => {
+const PokemonRow = ({ pokemon, getSelectedPokemon }) => {
   return (
 
     <tr>
       <td>{pokemon.name.english}</td>
       <td>{pokemon.type.join(", ")}</td>
-      <td><button>More Information</button></td>
+      <td><button onClick={() => getSelectedPokemon(pokemon)} >More Information</button></td>
     </tr>
 
 
@@ -42,14 +42,22 @@ PokemonRow.propTypes = {
   pokemon: PokemonType
 }
 
-
+const PokemonInfo = (props) => {
+  console.log('props', props)
+  return (
+    <div>
+      <h1>Pokemon Info</h1>
+    </div>
+  )
+}
 
 
 function Pokemon() {
 
   
   const [filter, setFilter] = useState('')
-
+  const [selectedPokemon, setSelectedPokemon] = useState(null)
+  console.log('selectedPokemon', selectedPokemon)
   console.log(filter)
 
   const searchPokemon = (event) => {
@@ -86,16 +94,21 @@ function Pokemon() {
 
             <tbody>
 
-              {pokemon.filter((pokemon) => pokemon.name.english.toLowerCase().includes(filter.toLowerCase())).slice(0, 20).map((pokemon) => (
-                <PokemonRow key={pokemon.id} pokemon={pokemon} />
-              )
-              )}
+{pokemon.filter((pokemon) => pokemon.name.english.toLowerCase().includes(filter.toLowerCase())).slice(0, 20).map((pokemon) => (
+  <PokemonRow
+    key={pokemon.id}
+    pokemon={pokemon}
+    getSelectedPokemon={(pokemon) => { setSelectedPokemon(pokemon) }}
+
+  />
+)
+)}
               
             </tbody>
           </table>
         </div>
 
-
+        <PokemonInfo {...selectedPokemon} />
       </div>
 
     </div>
